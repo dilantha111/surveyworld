@@ -7,6 +7,8 @@ $(document).ready(function () {
         e.preventDefault();
         var metadata = JSON.parse($("#metadata").val());
         var questions = metadata.questions;
+        var uid = $("#uid").val();
+        var surveyName = $("#surveyName").val();
         var answers = [];
 
         for(var i = 0 ; i < questions.length ; i++){
@@ -20,6 +22,11 @@ $(document).ready(function () {
             answers.push({questionName:questions[i].questionName,value:temp});
         }
 
-        console.log(answers);
+        $.get("/saveResponse",{uid:uid,surveyName:surveyName,answers:answers}).done(function (data) {
+            if(data === "true"){
+                location.replace("/thankYouPage");
+            }
+        });
+
     });
 });
