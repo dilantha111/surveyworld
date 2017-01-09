@@ -15,11 +15,13 @@ router.get('/', function(req, res, next) {
                 var metadata = val.val();
                 firebase.database().ref('public/'+uid+'/responses/'+surveyName).once('value').then(function (val1) {
                     var data = null;
+                    var baseURL = req.get('host');
                     if(val1.val() !== null){
                         data = val1.val();
-                        res.render("mysurveys",{surveyName:surveyName,metadata:metadata,data:data,uid:uid});
+                        var keys = Object.keys(data);
+                        res.render("mysurveys",{baseURL:baseURL,surveyName:surveyName,metadata:metadata,data:data,keys:keys,uid:uid});
                     }else{
-                        res.render("mysurveys",{surveyName:surveyName,metadata:metadata,data:data,uid:uid});
+                        res.render("mysurveys",{baseURL:baseURL,surveyName:surveyName,metadata:metadata,data:data,uid:uid});
                     }
                 });
                 
