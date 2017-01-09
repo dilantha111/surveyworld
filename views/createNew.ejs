@@ -1,0 +1,128 @@
+<% include templates/head.ejs %>
+
+<body class="nav-md">
+
+<div class="container body">
+
+
+    <div class="main_container">
+
+        <div class="col-md-3 left_col">
+            <div class="left_col scroll-view">
+
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Survey World</span></a>
+                </div>
+                <div class="clearfix"></div>
+
+                <% include templates/menu-profile.ejs %>
+
+                <br/>
+
+                <% include templates/sidebar-menu.ejs %>
+
+                <% include templates/menu-footer-buttons.ejs %>
+            </div>
+        </div>
+
+        <% include templates/top-navigation.ejs %>
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3>Create new Survey</h3>
+                    </div>
+
+                    <div class="title_right">
+                        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search for...">
+                                <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <!--inner content-->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="input-field">
+                            <input type="text" id="surveyName">
+                            <label>SurveyName</label>
+                        </div>
+                        <div class="input-field">
+                            <textarea id="SurveyDescription"></textarea>
+                            <label>Description</label>
+                        </div>
+                        <form id="displayForm">
+
+                        </form>
+                        <button id="addSurvey">Add Survey</button>
+                        <button id="clearSurvey">Clear survey</button>
+                    </div>
+                    <div class="col-md-6">
+                        <!--for the form materialize theme has been followed but custom styling-->
+                        <form>
+                            <div class="input-field">
+                                <textarea id="description"></textarea>
+                                <label>Description</label>
+                            </div>
+                            <div class="input-field">
+                                <select id="questionType">
+                                    <option>Text</option>
+                                    <option>Number</option>
+                                    <option>Radio</option>
+                                    <option>select</option>
+                                    <option>checkbox</option>
+                                </select>
+                                <label>Type of the question</label>
+                            </div>
+                            <div class="input-field">
+                                <input type="text" placeholder="Question Name:" id="questionName">
+                            </div>
+                            <div class="input-field">
+                                <input type="text" placeholder="Question Description" id="questionDescription">
+                                <label>Question Description if not leave it blank</label>
+                            </div>
+
+                            <!--fields that has to be displayed dynamically -->
+                            <div class="optional" id="option-list">
+                                <ul>
+                                </ul>
+                            </div>
+                            <div class="input-field optional">
+                                <input type="submit" value="Add option" id="add-option">
+                            </div>
+                            <div class="input-field optional">
+                                <input type="text" id="optionName">
+                                <label>Option name</label>
+                            </div>
+                            <div class="input-field optional">
+                                <input type="checkbox" id="ordered">
+                                <label>Options can be ordered</label>
+                            </div>
+                            <!--/fields that has to be displayed dynamically -->
+
+                            <button class="" type="submit" id="add-question">Add Question</button>
+
+
+                        </form>
+                    </div>
+                </div>
+                <!--/inner content-->
+
+
+            </div>
+        </div>
+        <!-- /page content -->
+    </div>
+
+</div>
+
+<% include templates/foot.ejs %>
+<script src="customJS/createNew.js"></script>

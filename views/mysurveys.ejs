@@ -1,0 +1,174 @@
+<!--use this file as a boilerplate -->
+
+<% include templates/head.ejs %>
+
+
+<body class="nav-md">
+
+<div class="container body">
+
+
+    <div class="main_container">
+
+        <div class="col-md-3 left_col">
+            <div class="left_col scroll-view">
+
+                <div class="navbar nav_title" style="border: 0;">
+                    <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Survey World</span></a>
+                </div>
+                <div class="clearfix"></div>
+
+                <% include templates/menu-profile.ejs %>
+
+                <br/>
+
+                <% include templates/sidebar-menu.ejs %>
+
+                <% include templates/menu-footer-buttons.ejs %>
+                <% var baseURL = "http://localhost:3000";%>
+            </div>
+        </div>
+
+        <% include templates/top-navigation.ejs %>
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="">
+                <div class="page-title">
+                    <div class="title_left">
+                        <h3 id="surveyName"><%=surveyName%></h3>
+                    </div>
+
+                    <div class="title_right">
+                        <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search for...">
+                                <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+
+                <!--inner content-->
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Survey Data</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li style="float:right">
+                                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content" style="display: block;">
+                                <%if(metadata.published === "false"){%>
+                                    <h1>Survey is not published yet</h1>
+                                    <span class="btn btn-primary" id="publish">Publish survey</span>
+                                <%}else if(data){%>
+                                    <h1>good we have some data</h1>
+                                <%}else{%>
+                                Your survey doesn't have any data to be displayed
+                                <%}%>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Control Panel</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li style="float:right">
+                                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content" style="display: block;">
+
+                                <!-- Display Survey details -->
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".metadata">View meta data</button>
+
+                                <div class="modal fade metadata" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog modal-sm">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                                                </button>
+                                                <h4 class="modal-title" style="text-align: center"><%=surveyName%></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h2> Survey Description : <%=metadata.surveyDescription%></h2>
+                                                <h3>Questions</h3>
+                                                <ol>
+                                                    <%for(var i = 0 ; i < metadata.questions.length ; i++){%>
+                                                        <li>
+                                                            <ul>
+                                                                <li>Question Name : <%=metadata.questions[i].questionName%></li>
+                                                                <li>Question Type : <%=metadata.questions[i].questionType%></li>
+                                                                <li>Question Description : <%=metadata.questions[i].questionDescription%></li>
+                                                            </ul>
+                                                        </li>
+                                                    <%}%>
+                                                </ol>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Display Survey details -->
+
+                                <!--display share link-->
+                                <button type="button"
+                                        <%if(metadata.published == "false"){%>
+                                            style="display:none"
+                                        <%}%>
+                                        class="btn btn-primary" data-toggle="modal" data-target=".shareLink">Share Link</button>
+
+                                <div class="modal fade shareLink" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog modal-sm">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                                                </button>
+                                                <h4 class="modal-title" style="text-align: center"><%=surveyName%></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h4>Share this link to get responses :</h4> <%=baseURL%>/surveys?user=<%=uid%>
+                                                &survey=<%=surveyName.split(' ').join('%')%>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" style="margin:0">copy to clip board</button>
+                                                <a href="<%=baseURL%>/surveys?user=<%=uid%>&survey=<%=surveyName.split(' ').join('%')%>"
+                                                    target="_blank">
+                                                    <button type="button" class="btn btn-primary" style="margin:0">view Survey</button>
+                                                </a>
+                                                <!--<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/display share link-->
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--/inner content-->
+
+            </div>
+        </div>
+        <!-- /page content -->
+    </div>
+
+</div>
+
+<% include templates/foot.ejs %>
+<script src="customJS/mysurveys.js"></script>

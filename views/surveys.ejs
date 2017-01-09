@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+    <% var questions = metadata.questions;%>
+
+    <div class="container card-panel hoverable" style="margin:auto;padding:20px 50px;">
+        <div class="row">
+            <div class="col s12">
+                <h1 style="text-align: center">welcome to survey world</h1>
+                <h2 style="text-align: center">Survey : <%=surveyName%></h2>
+                <p style="text-align: center"><%=metadata.surveyDescription%></p>
+            </div>
+        </div>
+        <div class="row card-content">
+            <form class="col s12">
+                <% for(var i = 0 ; i < questions.length; i++){%>
+                <%switch(questions[i].questionType){
+                    case "TEXT":
+                case "NUMBER":
+                %>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">mode_edit</i>
+                        <input id="<%=i%>" type="<%=questions[i].questionType.toLowerCase()%>" class="validate" required>
+                        <label for="password"><%=questions[i].questionName%></label>
+                    </div>
+                </div>
+                <%break;
+                case "SELECT":
+                %>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">mode_edit</i>
+                        <select required id="<%=i%>">
+                            <option value="" disabled selected>Choose your option</option>
+                            <% var options = questions[i].optionList;
+                            for(var j = 0 ; j < options.length; j++){%>
+                            <option value="<%=options[j]%>"><%=options[j]%></option>
+                            <%}%>
+                        </select>
+                        <label><%=questions[i].questionName%></label>
+                    </div>
+                </div>
+
+                <%break;
+                case "RADIO":
+                %>
+                <div class="row">
+                    <div class="col s12">
+                        <i class="material-icons prefix">mode_edit</i>
+                        <label><%=questions[i].questionName%></label>
+                    </div>
+                    <div class="col s2">
+
+                    </div>
+                    <div class="col s10">
+                        <%var options = questions[i].optionList;
+                        for(var j = 0 ; j < options.length; j++){ %>
+                        <p>
+                            <input name="<%=i%>" type="radio" id="test<%=j%>" value="<%=options[j]%>" required>
+                            <label for="test<%=j%>"><%=options[j]%></label>
+                        </p>
+                        <%}%>
+                    </div>
+                </div>
+
+                <%break;
+                case "CHECKBOX":
+                %>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">mode_edit</i>
+                        <select multiple required id="<%=i%>">
+                            <option value="" disabled selected>Choose your option</option>
+                            <% var options = questions[i].optionList;
+                            for(var j = 0 ; j < options.length; j++){%>
+                            <option value="<%=options[j]%>"><%=options[j]%></option>
+                            <%}%>
+                        </select>
+                        <label><%=questions[i].questionName%></label>
+                    </div>
+                </div>
+                <%break;
+                    default:
+                %>
+                <h1>Something wrong with this question please contact the site admin...</h1>
+                <%
+                }%>
+                <%}%>
+                <input value="<%=JSON.stringify(metadata)%>" id="metadata" hidden>
+                <button class="btn waves-effect waves-light" id="submit"
+                    type="submit"  style= "width:100%">
+                    Submit
+                </button>
+            </form>
+        </div>
+    </div>
+
+</body>
+<!--Import jQuery before materialize.js-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('select').material_select();
+    });
+</script>
+<script src="customJS/surveys.js"></script>
+</html>
