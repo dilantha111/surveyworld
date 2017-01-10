@@ -8,6 +8,7 @@ var firebase = require('firebase');
 router.get('/', function(req, res, next) {
     if(firebase.auth().currentUser != null){
         var uid = firebase.auth().currentUser.uid;
+        var email = firebase.auth().currentUser.email;
 
         firebase.database().ref('public/'+uid+'/structure').once('value').then(function (val) {
             if(val.val() !== null){
@@ -21,9 +22,9 @@ router.get('/', function(req, res, next) {
                     key = key.split(' ').join('%');
                     hrefs.push(key);
                 });
-                res.render("dashboard",{data:dataValue,keys:keyValues,href:hrefs});
+                res.render("dashboard",{data:dataValue,keys:keyValues,href:hrefs,email:email});
             }else{
-                res.render("dashboard",{keys:[]});
+                res.render("dashboard",{keys:[],email:email});
             }
 
         });
