@@ -5,7 +5,8 @@ var firebase = require('firebase');
 /* GET createNew page. */
 router.get('/', function(req, res, next) {
     if(firebase.auth().currentUser != null){
-        res.render("createNew",{title:"dashboard",surveys:['fuck','shit']});
+        var email = firebase.auth().currentUser.email;
+        res.render("createNew",{title:"dashboard",surveys:['aa','aa'],email:email});
     }else{
         res.redirect("/");
     }

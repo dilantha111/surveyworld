@@ -1,6 +1,15 @@
 <!--use this file as a boilerplate -->
 
 <% include templates/head.ejs %>
+<!-- Custom styling plus plugins -->
+<link href="css/custom.css" rel="stylesheet">
+<link href="css/icheck/flat/green.css" rel="stylesheet">
+
+<link href="js/datatables/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+<link href="js/datatables/buttons.bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="js/datatables/fixedHeader.bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="js/datatables/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="js/datatables/scroller.bootstrap.min.css" rel="stylesheet" type="text/css" />
 
 
 <body class="nav-md">
@@ -25,7 +34,6 @@
                 <% include templates/sidebar-menu.ejs %>
 
                 <% include templates/menu-footer-buttons.ejs %>
-                <% var baseURL = "http://localhost:3000";%>
             </div>
         </div>
 
@@ -54,29 +62,7 @@
 
                 <!--inner content-->
                 <div class="row">
-                    <div class="col-md-9">
-                        <div class="x_panel">
-                            <div class="x_title">
-                                <h2>Survey Data</h2>
-                                <ul class="nav navbar-right panel_toolbox">
-                                    <li style="float:right">
-                                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                    </li>
-                                </ul>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="x_content" style="display: block;">
-                                <%if(metadata.published === "false"){%>
-                                    <h1>Survey is not published yet</h1>
-                                    <span class="btn btn-primary" id="publish">Publish survey</span>
-                                <%}else if(data){%>
-                                    <h1>good we have some data</h1>
-                                <%}else{%>
-                                Your survey doesn't have any data to be displayed
-                                <%}%>
-                            </div>
-                        </div>
-                    </div>
+                    <!--control panel-->
                     <div class="col-md-3">
                         <div class="x_panel">
                             <div class="x_title">
@@ -106,13 +92,13 @@
                                                 <h3>Questions</h3>
                                                 <ol>
                                                     <%for(var i = 0 ; i < metadata.questions.length ; i++){%>
-                                                        <li>
-                                                            <ul>
-                                                                <li>Question Name : <%=metadata.questions[i].questionName%></li>
-                                                                <li>Question Type : <%=metadata.questions[i].questionType%></li>
-                                                                <li>Question Description : <%=metadata.questions[i].questionDescription%></li>
-                                                            </ul>
-                                                        </li>
+                                                    <li>
+                                                        <ul>
+                                                            <li>Question Name : <%=metadata.questions[i].questionName%></li>
+                                                            <li>Question Type : <%=metadata.questions[i].questionType%></li>
+                                                            <li>Question Description : <%=metadata.questions[i].questionDescription%></li>
+                                                        </ul>
+                                                    </li>
                                                     <%}%>
                                                 </ol>
                                             </div>
@@ -127,7 +113,7 @@
                                 <!--display share link-->
                                 <button type="button"
                                         <%if(metadata.published == "false"){%>
-                                            style="display:none"
+                                        style="display:none"
                                         <%}%>
                                         class="btn btn-primary" data-toggle="modal" data-target=".shareLink">Share Link</button>
 
@@ -145,8 +131,8 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-primary" style="margin:0">copy to clip board</button>
-                                                <a href="<%=baseURL%>/surveys?user=<%=uid%>&survey=<%=surveyName.split(' ').join('%')%>"
-                                                    target="_blank">
+                                                <a href="/surveys?user=<%=uid%>&survey=<%=surveyName.split(' ').join('%')%>"
+                                                   target="_blank">
                                                     <button type="button" class="btn btn-primary" style="margin:0">view Survey</button>
                                                 </a>
                                                 <!--<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>-->
@@ -159,7 +145,145 @@
                             </div>
                         </div>
                     </div>
+                    <!--/control panel-->
 
+                    <input type="text" value = "<%=JSON.stringify(metadata)%>" id="metadata" hidden>
+                    <input type="text" value="<%=JSON.stringify(data)%>" id="data" hidden>
+
+                    <!--calculate general statistic values-->
+                    <div class="col-md-3">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>General Analysis</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li style="float:right">
+                                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content" style="display: block;">
+
+                                <!-- Display general statistics -->
+                                <button type="button" id="generalStatCal" class="btn btn-primary" data-toggle="modal" data-target=".generalAnalysis">calculate</button>
+
+                                <div class="modal fade generalAnalysis" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog modal-sm">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                                                </button>
+                                                <h4 class="modal-title" style="text-align: center"><%=surveyName%></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ol id="generalStat"></ol>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Display general statistics -->
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--/calculate general statistic values-->
+
+                    <!--Graphs-->
+                    <div class="col-md-3">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Graphs</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li style="float:right">
+                                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content" style="display: block;">
+
+                                <!-- Display general statistics -->
+                                <button type="button" id="generalStatCal" class="btn btn-primary" data-toggle="modal" data-target=".graphs">calculate</button>
+
+                                <div class="modal fade graphs" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog modal-sm">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                                                </button>
+                                                <h4 class="modal-title" style="text-align: center"><%=surveyName%></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ol id="generalStat"></ol>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Display general statistics -->
+
+                            </div>
+                        </div>
+                    </div>
+                    <!--/Graphs-->
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="x_panel">
+                            <div class="x_title">
+                                <h2>Survey Data</h2>
+                                <ul class="nav navbar-right panel_toolbox">
+                                    <li style="float:right">
+                                        <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="x_content" style="display: block;">
+                                <%if(metadata.published === "false"){%>
+                                    <h1>Survey is not published yet</h1>
+                                    <span class="btn btn-primary" id="publish">Publish survey</span>
+                                <%}else if(data){
+                                %>
+                                <h1>View and download raw data</h1>
+
+                                <!--table to display data-->
+                                <table id="datatable-buttons" class="table table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <% for(var i = 0 ; i < metadata.questions.length;i++){%>
+                                        <th><%=metadata.questions[i].questionName%></th>
+                                        <%}%>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <% for(var i = 0; i < keys.length ;i++){
+                                        var temp = data[keys[i]];
+                                    %>
+                                    <tr>
+                                        <% for(var j =0; j < temp.length;j++){%>
+                                            <td><%=temp[j].value%></td>
+                                        <%}%>
+                                    </tr>
+
+                                    <%}%>
+                                    </tbody>
+                                </table>
+                                <!--/table to display data-->
+
+                                <%}else{%>
+                                Your survey doesn't have any data to be displayed
+                                <%}%>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!--/inner content-->
 
@@ -171,4 +295,77 @@
 </div>
 
 <% include templates/foot.ejs %>
+<!-- Datatables-->
+<script src="js/datatables/jquery.dataTables.min.js"></script>
+<script src="js/datatables/dataTables.bootstrap.js"></script>
+<script src="js/datatables/dataTables.buttons.min.js"></script>
+<script src="js/datatables/buttons.bootstrap.min.js"></script>
+<script src="js/datatables/jszip.min.js"></script>
+<script src="js/datatables/pdfmake.min.js"></script>
+<script src="js/datatables/vfs_fonts.js"></script>
+<script src="js/datatables/buttons.html5.min.js"></script>
+<script src="js/datatables/buttons.print.min.js"></script>
+<script src="js/datatables/dataTables.fixedHeader.min.js"></script>
+<script src="js/datatables/dataTables.keyTable.min.js"></script>
+<script src="js/datatables/dataTables.responsive.min.js"></script>
+<script src="js/datatables/responsive.bootstrap.min.js"></script>
+<script src="js/datatables/dataTables.scroller.min.js"></script>
+
+
+<!-- pace -->
+<script src="js/pace/pace.min.js"></script>
+<script>
+    var handleDataTableButtons = function() {
+                "use strict";
+                0 !== $("#datatable-buttons").length && $("#datatable-buttons").DataTable({
+                    dom: "Bfrtip",
+                    buttons: [{
+                        extend: "copy",
+                        className: "btn-sm"
+                    }, {
+                        extend: "csv",
+                        className: "btn-sm"
+                    }, {
+                        extend: "excel",
+                        className: "btn-sm"
+                    }, {
+                        extend: "pdf",
+                        className: "btn-sm"
+                    }, {
+                        extend: "print",
+                        className: "btn-sm"
+                    }],
+                    responsive: !0
+                })
+            },
+            TableManageButtons = function() {
+                "use strict";
+                return {
+                    init: function() {
+                        handleDataTableButtons()
+                    }
+                }
+            }();
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#datatable').dataTable();
+        $('#datatable-keytable').DataTable({
+            keys: true
+        });
+        $('#datatable-responsive').DataTable();
+        $('#datatable-scroller').DataTable({
+            ajax: "js/datatables/json/scroller-demo.json",
+            deferRender: true,
+            scrollY: 380,
+            scrollCollapse: true,
+            scroller: true
+        });
+        var table = $('#datatable-fixed-header').DataTable({
+            fixedHeader: true
+        });
+    });
+    TableManageButtons.init();
+</script>
+
 <script src="customJS/mysurveys.js"></script>

@@ -18,6 +18,7 @@ var surveys = require('./routes/surveys');
 /*Ajax requests*/
 var createNewSurvey = require('./routes/ajax/createNewSurvey');
 var publishSurvey = require('./routes/ajax/publishSurvey');
+var saveResponse = require('./routes/ajax/saveresponse');
 
 var app = express();
 
@@ -55,6 +56,7 @@ app.use('/surveys',surveys);
 /*Ajax requests*/
 app.use('/createNewSurvey',createNewSurvey);
 app.use('/publishSurvey',publishSurvey);
+app.use('/saveResponse',saveResponse);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
